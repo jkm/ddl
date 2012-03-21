@@ -19,9 +19,10 @@ Usage
 Posix systems (Linux, Mac OSX, FreeBSD, etc.)
 ---------------------------------------------
 
-    $ dmd path/to/ddl.d /path/to/libdl.a -L-ldl your_module.d
+    $ dmd path/to/ddl.d -L-ldl your_module.d
 
-Note, that libdl must be linked statically and dynamically.
+Note, that libdl must be also linked dynamically. It is linked already
+statically using pragma(lib, "dl").
 
 Windows
 -------
@@ -39,8 +40,8 @@ your system.
 Unfortunately the tests are not portable. So be prepared for seeing them fail on
 your system.
 
-    $ dmd -unittest -version=ddl -Ipath/to/ddl/tests /path/to/libdl.a -L-ldl path/to/ddl.d -run tests/test_c.d
-    $ dmd -unittest -version=ddl -Ipath/to/ddl/tests /path/to/libdl.a -L-ldl path/to/ddl.d -run tests/test_zmq.d
+    $ dmd -unittest -version=ddl -Ipath/to/ddl/tests -L-ldl path/to/ddl.d -run tests/test_c.d
+    $ dmd -unittest -version=ddl -Ipath/to/ddl/tests -L-ldl path/to/ddl.d -run tests/test_zmq.d
 
 Note this also runs ddl's unittests. Further, ```-version=ddl``` is needed to
 verify the example in the [documentation](http://jkm.github.com/ddl/ddl.html).

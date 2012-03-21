@@ -230,7 +230,11 @@ import std.exception;
 import std.conv;
 import std.path;
 import std.array;
-version(Posix) import core.sys.posix.dlfcn;
+version(Posix)
+{
+	import core.sys.posix.dlfcn;
+	pragma(lib, "dl"); // link statically
+}
 version(Windows) import core.sys.windows.windows, std.windows.syserror;
 debug import std.stdio;
 
