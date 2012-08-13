@@ -1,3 +1,6 @@
 [submodule "tests/ZeroMQ"]
 	path = tests/ZeroMQ
 	url = git://github.com/D-Programming-Deimos/ZeroMQ.git
+[submodule "docs/bootDoc"]
+	path = docs/bootDoc
+	url = git://github.com/JakobOvrum/bootDoc.git
