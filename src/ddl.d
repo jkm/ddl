@@ -50,7 +50,7 @@
  *     assert(stdio.printf == null);
  *
  *     // load the function printf
- *     stdio.loadFunction!("printf");
+ *     stdio.loadFunction!("printf")();
  *     // ... and call it
  *     stdio.printf(toStringz("Hello World.\n"));
  * }
@@ -126,7 +126,7 @@
  *     auto stdio = loadLibrary!(core.stdc.stdio)("c-2.13", false);
  *
  *     // compile error, since foobar is not extern(C) function in core.stdc.stdio
- *     static assert(!__traits(compiles, stdio.loadFunction!("foobar")));
+ *     static assert(!__traits(compiles, stdio.loadFunction!("foobar")()));
  *
  *     // stdio.printf is not loaded
  *     assert(stdio.printf == null);
@@ -134,7 +134,7 @@
  *     //stdio.printf(toStringz("Hello World\n"));
  *
  *     // assuming fun is a extern(C) declared function but not defined
- *     assertThrown!UnsatisfiedLinkException(stdio.loadFunction!("fun"));
+ *     assertThrown!UnsatisfiedLinkException(stdio.loadFunction!("fun")());
  * }
  * ---
  */
@@ -156,12 +156,12 @@ unittest
 	assert(stdio.printf == null);
 
 	// load the function printf
-	stdio.loadFunction!("printf");
+	stdio.loadFunction!("printf")();
 	// ... and call it
 	stdio.printf(toStringz("Hello World.\n"));
 
 	// unload
-	stdio.unloadFunction!("printf");
+	stdio.unloadFunction!("printf")();
 	assert(stdio.printf == null);
 }
 
@@ -212,7 +212,7 @@ unittest
 	auto stdio = loadLibrary!(core.stdc.stdio)(cLibrary, false);
 
 	// compile error, since foobar is not extern(C) function in core.stdc.stdio
-	static assert(!__traits(compiles, stdio.loadFunction!("foobar")));
+	static assert(!__traits(compiles, stdio.loadFunction!("foobar")()));
 
 	// stdio.printf is not loaded
 	assert(stdio.printf == null);
@@ -220,7 +220,7 @@ unittest
 	//stdio.printf(toStringz("Hello World\n"));
 
 	// assuming fun is a extern(C) declared function but not defined
-	//assertThrown!UnsatisfiedLinkException(stdio.loadFunction!("fun"));
+	//assertThrown!UnsatisfiedLinkException(stdio.loadFunction!("fun")());
 }
 
 import std.typetuple;
@@ -596,7 +596,7 @@ struct Library(alias moduleName)
 	{
 		static if (Functions.length != 0)
 		{
-			enum str2 = functionTypeAsString!(mixin("module_."~Functions[0]));
+			enum str2 = functionTypeAsString!(mixin("module_."~Functions[0]))();
 			enum str = stripExternC(str2);
 			mixin(str ~ " " ~ Functions[0] ~ ";");
 			mixin FunctionDeclarations!(Functions[1 .. $]);
@@ -770,9 +770,9 @@ struct Library(alias moduleName)
 			assert(lib.isLoaded);
 
 			assert(lib.fclose == null);
-			lib.loadFunction!("fclose");
+			lib.loadFunction!("fclose")();
 			assert(lib.fclose != null);
-			lib.unloadFunction!("fclose");
+			lib.unloadFunction!("fclose")();
 			assert(lib.fclose == null);
 		}
 
@@ -780,10 +780,10 @@ struct Library(alias moduleName)
 			import tests.dl;
 			auto lib = Library!(tests.dl)("dl", false);
 			// compile time error for non-declared extern(C) functions
-			static assert(!__traits(compiles, {lib.loadFunction!("bar");}));
-			static assert(!__traits(compiles, {lib.unloadFunction!("bar");}));
+			static assert(!__traits(compiles, {lib.loadFunction!("bar")();}));
+			static assert(!__traits(compiles, {lib.unloadFunction!("bar")();}));
 			// run-time exception for unavailable functions
-			assertThrown!UnsatisfiedLinkException(lib.loadFunction!("foo"));
+			assertThrown!UnsatisfiedLinkException(lib.loadFunction!("foo")());
 		}
 	}
 
@@ -800,7 +800,7 @@ struct Library(alias moduleName)
 	{
 		foreach(functionName; ExternCFunctions)
 		{
-			loadFunction!(functionName);
+			loadFunction!(functionName)();
 		}
 	}
 
@@ -812,7 +812,7 @@ struct Library(alias moduleName)
 	{
 		foreach(functionName; ExternCFunctions)
 		{
-			unloadFunction!(functionName);
+			unloadFunction!(functionName)();
 		}
 	}
 
@@ -943,15 +943,15 @@ string functionTypeAsString(alias functionName)()
 unittest
 {
 	import core.stdc.stdio;
-	assert(functionTypeAsString!(core.stdc.stdio.printf) == "int function(const(char*),...)");
-	static assert(functionTypeAsString!(core.stdc.stdio.printf) == "int function(const(char*),...)");
+	assert(functionTypeAsString!(core.stdc.stdio.printf)() == "int function(const(char*),...)");
+	static assert(functionTypeAsString!(core.stdc.stdio.printf)() == "int function(const(char*),...)");
 	// TODO
-	//assert(functionTypeAsString!(core.stdc.stdio.printf) == "nothrow extern (C) int function(const(char*),...)");
+	//assert(functionTypeAsString!(core.stdc.stdio.printf)() == "nothrow extern (C) int function(const(char*),...)");
 
 	extern(C) int function(int) function(int, int function(int)) bar;
 
-	assert(functionTypeAsString!(bar) == "extern (C) int function(int) function(int, extern (C) int function(int))");
-	static assert(functionTypeAsString!(bar) == "extern (C) int function(int) function(int, extern (C) int function(int))");
+	assert(functionTypeAsString!(bar)() == "extern (C) int function(int) function(int, extern (C) int function(int))");
+	static assert(functionTypeAsString!(bar)() == "extern (C) int function(int) function(int, extern (C) int function(int))");
 }
 
 string stripExternC(string str)
@@ -968,5 +968,5 @@ string stripExternC(string str)
 unittest
 {
 	extern(C) int function(int) function(int, int function(int)) bar;
-	static assert(stripExternC(functionTypeAsString!(bar)) == "int function(int) function(int, int function(int))");
+	static assert(stripExternC(functionTypeAsString!(bar)()) == "int function(int) function(int, int function(int))");
 }
