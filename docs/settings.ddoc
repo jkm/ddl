@@ -1,0 +1,25 @@
+PROJECTNAME = ddl
+REPOSITORY_URL = http://github.com/jkm/$(PROJECTNAME)
+REPOSRCTREE = $(REPOSITORY_URL)/blob/master/src
+REFERENCETOP = $(PROJECTNAME).html
+TITLEBARTEXT = <a href="http://buildhive.sdf.com/$(PROJECTNAME)">continuously integrated @ buildhive</a>
+RESOURCEROOT = 
+PACKAGESEP = .
+FAVICON = $(RESOURCEROOT)ico/favicon.ico
+LOGOSRC = $(RESOURCEROOT)img/icon-github.png
+LOGOALT = $(PROJECTNAME)
+LOGOLINK = $(REFERENCETOP)
+COPYRIGHT = Jens K. Mueller
+COPYRIGHTFOOTER = &copy; $(COPYRIGHT) 2012-$(YEAR) (generated at $(DATETIME))
+
+ISSUES = $(LINK $(REPOSITORY_URL)/issues)
+LICENSE = $(LINK_TEXT http://www.boost.org/LICENSE_1_0.txt, Boost License 1.0)  
+VERSION = 0.1
+DATE = 2012-03-21
+
+LINK = <a href="$0">$0</a>
+LINK_TEXT = <a href="$1">$+</a>
+PHOBOS_MODULE_LINK = $(LINK_TEXT http://dlang.org/phobos/$1#$2, $2)
+ANCHOR = <a name="$1">$+</a>
+LOCAL_LINK = <a href="#$0">$0</a>
+LOCAL_LINK_TEXT = <a href="#$1">$+</a>

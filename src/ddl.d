@@ -23,14 +23,14 @@
  * only compiled and tested on Linux. Please report any issue while trying it
  * out.)
  *
- * Source: $(SOURCE)
  * Bugs: $(ISSUES)
  * License: $(LICENSE)
  * Version: $(VERSION) ($(B alpha release))
- * Date: 2012-03-16
- *
+ * Date: $(DATE)
+ * $(BR)
+ * $(BR)
+ * $(BR)
  * Examples:
- * $(B Synopsis)
  *
  * The canonical Hello World loading the C library at run time and calling its
  * printf function.
@@ -450,8 +450,8 @@ unittest
 
 /**
  * $(ANCHOR loadLibraryWithName)
- * Returns: a $(LOCAL_LINK Library)!moduleName loading library libraryName and
- * all extern(C) functions declared in module moduleName bu default.
+ * Returns: a $(LOCAL_LINK_TEXT Library, Library!moduleName) loading library libraryName and
+ * all extern(C) functions declared in module moduleName by default.
  *
  * Params:
  * moduleName  = is the module name those extern(C) functions will be loaded
@@ -479,7 +479,6 @@ unittest
  * inferred from the module name.
  *
  * Examples:
- * $(B Example:)
  * ---
  * import ZeroMQ.zmq;
  * auto zmq = loadLibrary!(ZeroMQ.zmq); // loads library with name "zmq"
@@ -507,7 +506,6 @@ unittest
  * as          = is the variable name used when declaring Library!(moduleName)
  *
  * Examples:
- * $(B Example:)
  * ---
  * mixin declareLibraryAndAlias!("ZeroMQ.zmq", "zmq");
  * ---
