@@ -82,8 +82,6 @@
  *     zmq.zmq_version(&major, &minor, &patch);
  *
  *     assert(ZMQ_VERSION_MAJOR == major);
- *     assert(ZMQ_VERSION_MINOR == minor);
- *     assert(ZMQ_VERSION_PATCH == patch);
  * }
  * ---
  *
@@ -108,8 +106,6 @@
  *     zmq_version(&major, &minor, &patch);
  *
  *     assert(ZMQ_VERSION_MAJOR == major);
- *     assert(ZMQ_VERSION_MINOR == minor);
- *     assert(ZMQ_VERSION_PATCH == patch);
  * }
  * ---
  *
@@ -182,8 +178,6 @@ unittest
 	zmq.zmq_version(&major, &minor, &patch);
 
 	assert(ZMQ_VERSION_MAJOR == major);
-	assert(ZMQ_VERSION_MINOR == minor);
-	assert(ZMQ_VERSION_PATCH == patch);
 }
 
 unittest
@@ -198,8 +192,6 @@ unittest
 	zmq_version(&major, &minor, &patch);
 
 	assert(ZMQ_VERSION_MAJOR == major);
-	assert(ZMQ_VERSION_MINOR == minor);
-	assert(ZMQ_VERSION_PATCH == patch);
 }
 
 unittest
@@ -540,8 +532,6 @@ unittest
 	zmq_version(&major, &minor, &patch);
 
 	assert(ZMQ_VERSION_MAJOR == major);
-	assert(ZMQ_VERSION_MINOR == minor);
-	assert(ZMQ_VERSION_PATCH == patch);
 }
 
 /**
@@ -841,8 +831,8 @@ struct Library(alias moduleName)
 			        "vscanf", "printf", "scanf", "fgetc", "fputc", "fgets",
 			        "fputs", "gets", "puts", "ungetc", "fread", "fwrite",
 			        "fgetpos", "fsetpos", "fseek", "ftell", "rewind",
-			        "clearerr", "feof", "ferror", "snprintf", "vsnprintf",
-			        "perror"]);
+			        "clearerr", "feof", "ferror", "fileno", "snprintf",
+			        "vsnprintf", "perror"]);
 
 			lib.unloadAllFunctions();
 			assert(lib.loadedFunctions == []);

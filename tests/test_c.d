@@ -6,11 +6,13 @@ else import core.stdc.stdio;
 
 unittest
 {
-	version(ddl) stdio = loadLibrary!(core.stdc.stdio)("c-2.13", true);
+	version(ddl)
+	{
+		stdio = loadLibrary!(core.stdc.stdio)("c-2.13", true);
+		scope(exit) stdio.unloadAllFunctions();
+	}
 
 	printf(toStringz("Hello World.\n"));
-
-	version(ddl) stdio.unloadAllFunctions();
 }
 
-version(unittest) void main() {}
+void main() {}

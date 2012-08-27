@@ -5,8 +5,6 @@ else import zmq;
 
 unittest
 {
-	import std.stdio;
-
 	version(ddl)
 	{
 		assert(!zmq.isLoaded);
@@ -25,8 +23,4 @@ unittest
 	zmq_version(&major, &minor, &patch);
 
 	assert(ZMQ_VERSION_MAJOR == major);
-	assert(ZMQ_VERSION_MINOR == minor);
-	assert(ZMQ_VERSION_PATCH == patch);
 }
-
-version(unittest) void main() {}
