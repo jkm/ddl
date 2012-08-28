@@ -42,9 +42,9 @@
  *     import std.string : toStringz;
  *     import core.stdc.stdio; // import the module as usual
  *
- *     // load the library "c-2.13" to resolve extern(C) functions declared
+ *     // load the library C to resolve extern(C) functions declared
  *     // in core.std.stdio, but load no functions yet
- *     auto stdio = loadLibrary!(core.stdc.stdio)("c-2.13", false);
+ *     auto stdio = loadLibrary!(core.stdc.stdio)(libraryFilename("c")~".6"), false);
  *
  *     // not loaded yet
  *     assert(stdio.printf == null);
@@ -119,7 +119,7 @@
  *
  *     // throws if some_library could not be loaded
  *     assertThrown!UnsatisfiedLinkException(loadLibrary!(core.stdc.stdio)("some_library", false));
- *     auto stdio = loadLibrary!(core.stdc.stdio)("c-2.13", false);
+ *     auto stdio = loadLibrary!(core.stdc.stdio)(libraryFilename("c")~".6", false);
  *
  *     // compile error, since foobar is not extern(C) function in core.stdc.stdio
  *     static assert(!__traits(compiles, stdio.loadFunction!("foobar")()));
@@ -137,7 +137,7 @@
 module ddl;
 
 // tests assume there is the standard C library
-version(unittest) private enum cLibrary = "c-2.13";
+version(unittest) private enum cLibrary = libraryFilename("c")~".6";
 
 unittest
 {
@@ -426,7 +426,6 @@ unittest
 	version(Posix)
 	{
 		assert(libraryPath(cLibrary) == "/lib/x86_64-linux-gnu/libc.so.6");
-		assert(libraryPath("lib" ~ cLibrary ~ ".so") == "/lib/x86_64-linux-gnu/libc.so.6");
 	}
 	else version(Windows)
 	{
@@ -630,13 +629,9 @@ struct Library(alias moduleName)
 			assert(libc.isLoaded);
 		}
 
+		version(X86_64)
 		{
-			auto libc = Library!(core.stdc.stdio)("lib" ~ cLibrary ~ ".so", false);
-			assert(libc.isLoaded);
-		}
-
-		{
-			auto libc = Library!(core.stdc.stdio)("/lib/x86_64-linux-gnu/libc-2.13.so", false);
+			auto libc = Library!(core.stdc.stdio)("/lib/x86_64-linux-gnu/libc.so.6", false);
 			assert(libc.isLoaded);
 		}
 
