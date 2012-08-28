@@ -2,7 +2,8 @@ DDL - D(eimos) Dynamic Loader
 =============================
 
 The D(eimos) Dynamic Loader allows loading dynamic C libraries at run time.
-Consult its [documentation](http://jkm.github.com/ddl/ddl.html) for more information.
+Consult its [API documentation](http://jkm.github.com/ddl/ddl.html) for more
+information.
 
 Dependencies
 ============
@@ -13,45 +14,45 @@ fine.
 
 There are no dependencies on Windows systems.
 
-Usage
-=====
+Configure and Build
+===================
 
-Posix systems (Linux, Mac OSX, FreeBSD, etc.)
----------------------------------------------
+Don't forget to update the submodules if you haven't cloned recursively.
 
-    $ dmd path/to/ddl.d -L-ldl your_module.d
+    $ git submodule init; git submodule update;
 
-Note, that libdl must be also linked dynamically. It is linked already
-statically using pragma(lib, "dl").
+Use [premake4](https://bitbucket.org/goughy/premake-dev-d/) to configure ddl.
 
-Windows
--------
-
-    $ dmd path/to/ddl.d your_module.d
+    $ premake4 gmake
+	$ make
 
 Testing
 =======
 
 See directory tests/ for some usage examples.
 
-The tests assume that there is the standard C library and the ZeroMQ library on
-your system.
+The tests assume that there is the standard C library and the OpenSSL library
+installed on your system. Thus, the tests may fail for good reason on your
+system. But please report any problem.
 
-Unfortunately the tests are not portable. So be prepared for seeing them fail on
-your system.
+	$ make config=tests
 
-    $ dmd -unittest -version=ddl -Ipath/to/ddl/tests -L-ldl path/to/ddl.d -run tests/test_c.d
-    $ dmd -unittest -version=ddl -Ipath/to/ddl/tests -L-ldl path/to/ddl.d -run tests/test_zmq.d
+Cleaning
+========
 
-Note this also runs ddl's unittests. Further, ```-version=ddl``` is needed to
-verify the example in the [documentation](http://jkm.github.com/ddl/ddl.html).
+Clean created binaries
 
-To run the tests on Windows leave linking of dl out.
+	$ make clean
+
+Clean all created files
+
+	$ premake4 clean
 
 Issues
 ======
 
-See [issues](https://github.com/jkm/ddl/issues) on github.
+Check for [issues](https://github.com/jkm/ddl/issues) on github.
+Please report any issues you encounter.
 
 Licence
 =======
