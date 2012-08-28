@@ -418,7 +418,7 @@ unittest
 {
 	version(Posix)
 	{
-		assert(libraryPath(cLibrary) == "/lib/x86_64-linux-gnu/libc.so.6");
+		assert(endsWith(libraryPath(cLibrary), "/libc.so.6"));
 	}
 	else version(Windows)
 	{
