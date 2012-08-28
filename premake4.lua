@@ -29,6 +29,7 @@ solution "ddl"
 	project "test"
 		kind              "ConsoleApp"
 		includedirs       { "src/", "tests/", "tests/openssl" }
+		files             { "src/ddl.d" } -- to run the unittests in ddl
 		files             { "tests/test_c.d", "tests/test_openssl.d" }
 		links             { "ddl", "dl", "ssl" }
 		defines           { "ddl" }

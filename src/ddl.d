@@ -44,7 +44,7 @@
  *
  *     // load the library C to resolve extern(C) functions declared
  *     // in core.std.stdio, but load no functions yet
- *     auto stdio = loadLibrary!(core.stdc.stdio)(libraryFilename("c")~".6"), false);
+ *     auto stdio = loadLibrary!(core.stdc.stdio)(libraryFilename("c")~".6", false);
  *
  *     // not loaded yet
  *     assert(stdio.printf == null);
