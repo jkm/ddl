@@ -13,7 +13,7 @@ solution "ddl"
 
 	configuration "*Tests*"
 		buildoptions   { "-unittest" }
-		includedirs    { "tests/" }
+		includedirs    { "tests/openssl" }
 
 	project "ddl"
 		kind              "StaticLib"
@@ -28,7 +28,7 @@ solution "ddl"
 
 	project "test"
 		kind              "ConsoleApp"
-		includedirs       { "src/", "tests/", "tests/openssl" }
+		includedirs       { "src/", "tests/openssl" }
 		files             { "src/ddl.d" } -- to run the unittests in ddl
 		files             { "tests/test_c.d", "tests/test_openssl.d" }
 		links             { "ddl", "dl", "ssl" }

@@ -56,32 +56,26 @@
  * }
  * ---
  *
- * To give another example we use $(LINK_TEXT http://www.zeromq.org/, ZeroMQ), a
- * asynchronous message library. $(LINK_TEXT https://github.com/D-Programming-Deimos, Deimos)
+ * To give another example we use $(LINK_TEXT http://www.openssl.org/, OpenSSL).
+ * $(LINK_TEXT https://github.com/D-Programming-Deimos, Deimos)
  * already provides a D module to interface it (see
- * $(LINK_TEXT https://github.com/D-Programming-Deimos/ZeroMQ, Deimos ZeroMQ)).
- * Provided that you pass the path to ZeroMQ/zmq.d to the compiler and the zmq
- * library is loadable the following code works.
+ * $(LINK_TEXT https://github.com/D-Programming-Deimos/openssl, Deimos OpenSSL)).
+ * Provided that you pass the path to deimos/openssl/aes.d to the compiler and
+ * the Openssl library is loadable the following code works.
  *
  * ---
  * unittest
  * {
  *     import ddl;
- *     import ZeroMQ.zmq; // need to use the directory one above; just zmq won't work
+ *     import deimos.openssl.aes;
  *
- *     auto zmq = loadLibrary!(ZeroMQ.zmq)("zmq");
- *     assert(zmq.loadedFunctions == ["zmq_version", "zmq_errno",
- *              "zmq_strerror", "zmq_msg_init", "zmq_msg_init_size",
- *              "zmq_msg_init_data", "zmq_msg_close", "zmq_msg_move",
- *              "zmq_msg_copy", "zmq_msg_data", "zmq_msg_size", "zmq_init",
- *              "zmq_term", "zmq_socket", "zmq_close", "zmq_setsockopt",
- *              "zmq_getsockopt", "zmq_bind", "zmq_connect", "zmq_send", "zmq_recv",
- *              "zmq_poll", "zmq_device"]);
- *
- *     int major, minor, patch;
- *     zmq.zmq_version(&major, &minor, &patch);
- *
- *     assert(ZMQ_VERSION_MAJOR == major);
+ *     auto aes = loadLibrary!(deimos.openssl.aes)("ssl");
+ *     assert(aes.loadedFunctions == ["AES_options", "AES_set_encrypt_key",
+ *               "AES_set_decrypt_key", "AES_encrypt", "AES_decrypt",
+ *               "AES_ecb_encrypt", "AES_cbc_encrypt", "AES_cfb128_encrypt",
+ *               "AES_cfb1_encrypt", "AES_cfb8_encrypt", "AES_ofb128_encrypt",
+ *               "AES_ctr128_encrypt", "AES_ige_encrypt", "AES_bi_ige_encrypt",
+ *               "AES_wrap_key", "AES_unwrap_key"]);
  * }
  * ---
  *
@@ -93,19 +87,21 @@
  * time. Otherwise it is linked at compile time.
  * ---
  * import ddl;
- * // declare either Library!(ZeroMQ.zmq) zmq or import zmq
- * version(ddl) mixin declareLibraryAndAlias!("ZeroMQ.zmq", "zmq");
- * else import zmq;
+ * // declare either Library!(deimos.openssl.sha) sha or import deimos.openssl.sha
+ * version(ddl) mixin declareLibraryAndAlias!("deimos.openssl.sha", "sha");
+ * else import deimos.openssl.sha;
  *
  * unittest
  * {
- *     version(ddl) zmq = loadLibrary!(ZeroMQ.zmq)();
+ *     version(ddl) sha = loadLibrary!(deimos.openssl.sha)("ssl");
  *
  *     // use as usual
- *     int major, minor, patch;
- *     zmq_version(&major, &minor, &patch);
+ *     ubyte[] ibuf = [0x61, 0x62, 0x63];
+ *     ubyte[20] obuf;
+ *     SHA1(ibuf.ptr, ibuf.length, obuf.ptr);
  *
- *     assert(ZMQ_VERSION_MAJOR == major);
+ *     assert(obuf == [0xA9, 0x99, 0x3E, 0x36, 0x47, 0x06, 0x81, 0x6A, 0xBA,0x3E,
+ *                     0x25, 0x71, 0x78, 0x50, 0xC2, 0x6C, 0x9C, 0xD0, 0xD8, 0x9D]);
  * }
  * ---
  *
@@ -163,35 +159,32 @@ unittest
 
 unittest
 {
-	import ZeroMQ.zmq; // need to use the directory one above; just zmq won't work
+	import ddl;
+	import deimos.openssl.aes;
 
-	auto zmq = loadLibrary!(ZeroMQ.zmq)("zmq");
-	assert(zmq.loadedFunctions == ["zmq_version", "zmq_errno",
-			"zmq_strerror", "zmq_msg_init", "zmq_msg_init_size",
-			"zmq_msg_init_data", "zmq_msg_close", "zmq_msg_move",
-			"zmq_msg_copy", "zmq_msg_data", "zmq_msg_size", "zmq_init",
-			"zmq_term", "zmq_socket", "zmq_close", "zmq_setsockopt",
-			"zmq_getsockopt", "zmq_bind", "zmq_connect", "zmq_send", "zmq_recv",
-			"zmq_poll", "zmq_device"]);
-
-	int major, minor, patch;
-	zmq.zmq_version(&major, &minor, &patch);
-
-	assert(ZMQ_VERSION_MAJOR == major);
+	auto aes = loadLibrary!(deimos.openssl.aes)("ssl");
+	assert(aes.loadedFunctions == ["AES_options", "AES_set_encrypt_key",
+	             "AES_set_decrypt_key", "AES_encrypt", "AES_decrypt",
+	             "AES_ecb_encrypt", "AES_cbc_encrypt", "AES_cfb128_encrypt",
+	             "AES_cfb1_encrypt", "AES_cfb8_encrypt", "AES_ofb128_encrypt",
+	             "AES_ctr128_encrypt", "AES_ige_encrypt", "AES_bi_ige_encrypt",
+	             "AES_wrap_key", "AES_unwrap_key"]);
 }
 
 unittest
 {
-	version(ddl) mixin declareLibraryAndAlias!("ZeroMQ.zmq", "zmq");
-	else import zmq;
+	version(ddl) mixin declareLibraryAndAlias!("deimos.openssl.sha", "sha");
+	else import deimos.openssl.sha;
 
-	version(ddl) zmq = loadLibrary!(ZeroMQ.zmq)();
+	version(ddl) sha = loadLibrary!(deimos.openssl.sha)("ssl");
 
-	// usage as usual
-	int major, minor, patch;
-	zmq_version(&major, &minor, &patch);
+	// use as usual
+	ubyte[] ibuf = [0x61, 0x62, 0x63];
+	ubyte[20] obuf;
+	SHA1(ibuf.ptr, ibuf.length, obuf.ptr);
 
-	assert(ZMQ_VERSION_MAJOR == major);
+	assert(obuf == [0xA9, 0x99, 0x3E, 0x36, 0x47, 0x06, 0x81, 0x6A, 0xBA,0x3E,
+	                0x25, 0x71, 0x78, 0x50, 0xC2, 0x6C, 0x9C, 0xD0, 0xD8, 0x9D]);
 }
 
 unittest
@@ -470,8 +463,8 @@ unittest
  *
  * Examples:
  * ---
- * import ZeroMQ.zmq;
- * auto zmq = loadLibrary!(ZeroMQ.zmq); // loads library with name "zmq"
+ * import deimos.openssl.aes;
+ * auto aes = loadLibrary!(deimos.openssl.aes); // loads library with name "aes
  * ---
  *
  */
@@ -497,7 +490,7 @@ unittest
  *
  * Examples:
  * ---
- * mixin declareLibraryAndAlias!("ZeroMQ.zmq", "zmq");
+ * mixin declareLibraryAndAlias!("deimos.openssl.sha", "sha");
  * ---
  *
  */
@@ -522,14 +515,16 @@ mixin template declareLibraryAndAlias(alias moduleName, alias as)
 
 unittest
 {
-	mixin declareLibraryAndAlias!("ZeroMQ.zmq", "zmq");
-	zmq = loadLibrary!(ZeroMQ.zmq)();
+	mixin declareLibraryAndAlias!("deimos.openssl.sha", "sha");
+	sha = loadLibrary!(deimos.openssl.sha)("ssl");
 
 	// usage as usual
-	int major, minor, patch;
-	zmq_version(&major, &minor, &patch);
+	ubyte[] ibuf = [0x61, 0x62, 0x63];
+	ubyte[20] obuf;
+	SHA1(ibuf.ptr, ibuf.length, obuf.ptr);
 
-	assert(ZMQ_VERSION_MAJOR == major);
+	assert(obuf == [0xA9, 0x99, 0x3E, 0x36, 0x47, 0x06, 0x81, 0x6A, 0xBA,0x3E,
+	                0x25, 0x71, 0x78, 0x50, 0xC2, 0x6C, 0x9C, 0xD0, 0xD8, 0x9D]);
 }
 
 /**
