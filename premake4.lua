@@ -28,11 +28,9 @@ solution "ddl"
 
 	project "test"
 		kind              "ConsoleApp"
-		includedirs       { "src/", "tests/" }
-		--files             { "tests/test_c.d", "tests/test_zmq.d" }
-		files             { "tests/test_c.d" }
-		--links             { "ddl", "dl", "zmq" }
-		links             { "ddl", "dl" }
+		includedirs       { "src/", "tests/", "tests/openssl" }
+		files             { "tests/test_c.d", "tests/test_openssl.d" }
+		links             { "ddl", "dl", "ssl" }
 		defines           { "ddl" }
 		postbuildcommands { "./test" }
 

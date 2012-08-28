@@ -4,3 +4,6 @@
 [submodule "docs/bootDoc"]
 	path = docs/bootDoc
 	url = git://github.com/JakobOvrum/bootDoc.git
+[submodule "tests/openssl"]
+	path = tests/openssl
+	url = git://github.com/D-Programming-Deimos/openssl.git
