@@ -8,7 +8,7 @@ unittest
 {
 	version(ddl)
 	{
-		stdio = loadLibrary!(core.stdc.stdio)("c-2.13", true);
+		stdio = loadLibrary!(core.stdc.stdio)("c", true);
 		scope(exit) stdio.unloadAllFunctions();
 	}
 
