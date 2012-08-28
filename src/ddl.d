@@ -697,9 +697,17 @@ struct Library(alias moduleName)
 		static assert(staticIndexOf!(functionName, ExternCFunctions) != -1,
 		              "No extern(C) function " ~ functionName ~ " in " ~ moduleName.stringof);
 
+		mixin("alias " ~ functionName ~ " name;");
+		static if (__traits(getOverloads, moduleName, functionName).length > 1)
+		{
+			pragma(msg, "Warning: Function " ~ functionName ~ " is overloaded. "~
+					    "We picked '" ~ typeof(name).stringof ~ "' but I don't "~
+						"know which one will be loaded. Please report your "~
+						"findings.");
+		}
+
 		assert(_handle, "There was no library loaded.");
 
-		mixin("alias " ~ functionName ~ " name;");
 		// already loaded
 		if (name != null)
 			return;
