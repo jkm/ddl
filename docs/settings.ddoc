@@ -2,7 +2,7 @@ PROJECTNAME = ddl
 REPOSITORY_URL = http://github.com/jkm/$(PROJECTNAME)
 REPOSRCTREE = $(REPOSITORY_URL)/blob/master/src
 REFERENCETOP = $(PROJECTNAME).html
-TITLEBARTEXT = <a href="http://buildhive.sdf.com/$(PROJECTNAME)">continuously integrated @ buildhive</a>
+TITLEBARTEXT = <a href="https://buildhive.cloudbees.com/job/jkm/job/$(PROJECTNAME)/">continuously integrated @ buildhive</a>
 RESOURCEROOT = 
 PACKAGESEP = .
 FAVICON = $(RESOURCEROOT)ico/favicon.ico
