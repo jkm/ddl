@@ -10,7 +10,6 @@ unittest
 {
 	version(ddl)
 	{
-		import std.conv;
 		assert(!aes.isLoaded);
 		aes = loadLibrary!(deimos.openssl.aes)("ssl");
 		assert(aes.loadedFunctions == ["AES_options", "AES_set_encrypt_key",
@@ -23,7 +22,6 @@ unittest
 
 	version(ddl)
 	{
-		import std.conv;
 		assert(!sha.isLoaded);
 		sha = loadLibrary!(deimos.openssl.sha)("ssl");
 		assert(sha.loadedFunctions == ["SHA_Init", "SHA_Update", "SHA_Final",
