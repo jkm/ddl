@@ -8,7 +8,7 @@ unittest
 {
 	version(ddl)
 	{
-		stdio = loadLibrary!(core.stdc.stdio)("c", true);
+		stdio = loadLibrary!(core.stdc.stdio)(libraryFilename("c")~".6", true);
 		scope(exit) stdio.unloadAllFunctions();
 	}
 

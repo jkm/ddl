@@ -364,9 +364,8 @@ unittest
 	assert(isLoadable(cLibrary));
 	assert(!isLoadable("unknown-library"));
 
-	// see BUG "Finding standard C library"
-	//assert(isLoadable("libc.so.6"));
-	//assert(isLoadable("c"));
+	assert(isLoadable("libc.so.6"));
+	assert(isLoadable(libraryFilename("c")~".6"));
 }
 
 // helper for libraryPath
