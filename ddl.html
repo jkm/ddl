@@ -164,9 +164,9 @@
      <span class="d_keyword">import</span> std.string : toStringz;
      <span class="d_keyword">import</span> core.stdc.stdio; <span class="d_comment">// import the module as usual
 </span>
-     <span class="d_comment">// load the library "c-2.13" to resolve extern(C) functions declared
+     <span class="d_comment">// load the library C to resolve extern(C) functions declared
 </span>     <span class="d_comment">// in core.std.stdio, but load no functions yet
-</span>     <span class="d_keyword">auto</span> stdio = loadLibrary!(core.stdc.stdio)(<span class="d_string">"c-2.13"</span>, <span class="d_keyword">false</span>);
+</span>     <span class="d_keyword">auto</span> stdio = loadLibrary!(core.stdc.stdio)(libraryFilename(<span class="d_string">"c"</span>)~<span class="d_string">".6"</span>, <span class="d_keyword">false</span>);
 
      <span class="d_comment">// not loaded yet
 </span>     <span class="d_keyword">assert</span>(stdio.printf == <span class="d_keyword">null</span>);
@@ -178,32 +178,26 @@
  }
 </pre>
 
- To give another example we use <a href="http://www.zeromq.org/">ZeroMQ</a>, a
- asynchronous message library. <a href="https://github.com/D-Programming-Deimos">Deimos</a>
+ To give another example we use <a href="http://www.openssl.org/">OpenSSL</a>.
+ <a href="https://github.com/D-Programming-Deimos">Deimos</a>
  already provides a D module to interface it (see
- <a href="https://github.com/D-Programming-Deimos/ZeroMQ">Deimos ZeroMQ</a>).
- Provided that you pass the path to ZeroMQ/zmq.d to the compiler and the zmq
- library is loadable the following code works.
+ <a href="https://github.com/D-Programming-Deimos/openssl">Deimos OpenSSL</a>).
+ Provided that you pass the path to deimos/openssl/aes.d to the compiler and
+ the Openssl library is loadable the following code works.
 <br><br>
 
 <pre class="d_code"> <span class="d_keyword">unittest</span>
  {
      <span class="d_keyword">import</span> <u>ddl</u>;
-     <span class="d_keyword">import</span> ZeroMQ.zmq; <span class="d_comment">// need to use the directory one above; just zmq won't work
-</span>
-     <span class="d_keyword">auto</span> zmq = loadLibrary!(ZeroMQ.zmq)(<span class="d_string">"zmq"</span>);
-     <span class="d_keyword">assert</span>(zmq.loadedFunctions == [<span class="d_string">"zmq_version"</span>, <span class="d_string">"zmq_errno"</span>,
-              <span class="d_string">"zmq_strerror"</span>, <span class="d_string">"zmq_msg_init"</span>, <span class="d_string">"zmq_msg_init_size"</span>,
-              <span class="d_string">"zmq_msg_init_data"</span>, <span class="d_string">"zmq_msg_close"</span>, <span class="d_string">"zmq_msg_move"</span>,
-              <span class="d_string">"zmq_msg_copy"</span>, <span class="d_string">"zmq_msg_data"</span>, <span class="d_string">"zmq_msg_size"</span>, <span class="d_string">"zmq_init"</span>,
-              <span class="d_string">"zmq_term"</span>, <span class="d_string">"zmq_socket"</span>, <span class="d_string">"zmq_close"</span>, <span class="d_string">"zmq_setsockopt"</span>,
-              <span class="d_string">"zmq_getsockopt"</span>, <span class="d_string">"zmq_bind"</span>, <span class="d_string">"zmq_connect"</span>, <span class="d_string">"zmq_send"</span>, <span class="d_string">"zmq_recv"</span>,
-              <span class="d_string">"zmq_poll"</span>, <span class="d_string">"zmq_device"</span>]);
+     <span class="d_keyword">import</span> deimos.openssl.aes;
 
-     <span class="d_keyword">int</span> major, minor, patch;
-     zmq.zmq_version(&amp;major, &amp;minor, &amp;patch);
-
-     <span class="d_keyword">assert</span>(ZMQ_VERSION_MAJOR == major);
+     <span class="d_keyword">auto</span> aes = loadLibrary!(deimos.openssl.aes)(<span class="d_string">"ssl"</span>);
+     <span class="d_keyword">assert</span>(aes.loadedFunctions == [<span class="d_string">"AES_options"</span>, <span class="d_string">"AES_set_encrypt_key"</span>,
+               <span class="d_string">"AES_set_decrypt_key"</span>, <span class="d_string">"AES_encrypt"</span>, <span class="d_string">"AES_decrypt"</span>,
+               <span class="d_string">"AES_ecb_encrypt"</span>, <span class="d_string">"AES_cbc_encrypt"</span>, <span class="d_string">"AES_cfb128_encrypt"</span>,
+               <span class="d_string">"AES_cfb1_encrypt"</span>, <span class="d_string">"AES_cfb8_encrypt"</span>, <span class="d_string">"AES_ofb128_encrypt"</span>,
+               <span class="d_string">"AES_ctr128_encrypt"</span>, <span class="d_string">"AES_ige_encrypt"</span>, <span class="d_string">"AES_bi_ige_encrypt"</span>,
+               <span class="d_string">"AES_wrap_key"</span>, <span class="d_string">"AES_unwrap_key"</span>]);
  }
 </pre>
 
@@ -215,19 +209,21 @@
  If module is compiled with version(<a class="symbol symbol-anchor" name="ddl" href="#ddl">ddl</a>) then the library is loaded at run
  time. Otherwise it is linked at compile time.
 <pre class="d_code"> <span class="d_keyword">import</span> <u>ddl</u>;
- <span class="d_comment">// declare either Library!(ZeroMQ.zmq) zmq or import zmq
-</span> <span class="d_keyword">version</span>(<u>ddl</u>) <span class="d_keyword">mixin</span> declareLibraryAndAlias!(<span class="d_string">"ZeroMQ.zmq"</span>, <span class="d_string">"zmq"</span>);
- <span class="d_keyword">else</span> <span class="d_keyword">import</span> zmq;
+ <span class="d_comment">// declare either Library!(deimos.openssl.sha) sha or import deimos.openssl.sha
+</span> <span class="d_keyword">version</span>(<u>ddl</u>) <span class="d_keyword">mixin</span> declareLibraryAndAlias!(<span class="d_string">"deimos.openssl.sha"</span>, <span class="d_string">"sha"</span>);
+ <span class="d_keyword">else</span> <span class="d_keyword">import</span> deimos.openssl.sha;
 
  <span class="d_keyword">unittest</span>
  {
-     <span class="d_keyword">version</span>(<u>ddl</u>) zmq = loadLibrary!(ZeroMQ.zmq)();
+     <span class="d_keyword">version</span>(<u>ddl</u>) sha = loadLibrary!(deimos.openssl.sha)(<span class="d_string">"ssl"</span>);
 
      <span class="d_comment">// use as usual
-</span>     <span class="d_keyword">int</span> major, minor, patch;
-     zmq_version(&amp;major, &amp;minor, &amp;patch);
+</span>     <span class="d_keyword">ubyte</span>[] ibuf = [0x61, 0x62, 0x63];
+     <span class="d_keyword">ubyte</span>[20] obuf;
+     SHA1(ibuf.ptr, ibuf.length, obuf.ptr);
 
-     <span class="d_keyword">assert</span>(ZMQ_VERSION_MAJOR == major);
+     <span class="d_keyword">assert</span>(obuf == [0xA9, 0x99, 0x3E, 0x36, 0x47, 0x06, 0x81, 0x6A, 0xBA,0x3E,
+                     0x25, 0x71, 0x78, 0x50, 0xC2, 0x6C, 0x9C, 0xD0, 0xD8, 0x9D]);
  }
 </pre>
 
@@ -240,7 +236,7 @@
 
      <span class="d_comment">// throws if some_library could not be loaded
 </span>     assertThrown!UnsatisfiedLinkException(loadLibrary!(core.stdc.stdio)(<span class="d_string">"some_library"</span>, <span class="d_keyword">false</span>));
-     <span class="d_keyword">auto</span> stdio = loadLibrary!(core.stdc.stdio)(<span class="d_string">"c-2.13"</span>, <span class="d_keyword">false</span>);
+     <span class="d_keyword">auto</span> stdio = loadLibrary!(core.stdc.stdio)(libraryFilename(<span class="d_string">"c"</span>)~<span class="d_string">".6"</span>, <span class="d_keyword">false</span>);
 
      <span class="d_comment">// compile error, since foobar is not extern(C) function in core.stdc.stdio
 </span>     <span class="d_keyword">static</span> <span class="d_keyword">assert</span>(!<span class="d_keyword">__traits</span>(compiles, stdio.loadFunction!(<span class="d_string">"foobar"</span>)()));
@@ -324,8 +320,8 @@
 <div class="declaration-content"><dl><p>Same as <a href="#loadLibraryWithName">above</a> but the library name is
  inferred from the module name.
 </p>
-<dt>Examples</dt><dd><pre class="d_code"> <span class="d_keyword">import</span> ZeroMQ.zmq;
- <span class="d_keyword">auto</span> zmq = <u>loadLibrary</u>!(ZeroMQ.zmq); <span class="d_comment">// loads library with name "zmq"
+<dt>Examples</dt><dd><pre class="d_code"> <span class="d_keyword">import</span> deimos.openssl.aes;
+ <span class="d_keyword">auto</span> aes = <u>loadLibrary</u>!(deimos.openssl.aes); <span class="d_comment">// loads library with name "aes
 </span></pre>
 </dd>
 </dl>
@@ -339,7 +335,7 @@
 <tr><td>as</td>
 <td>is the variable name used when declaring Library!(moduleName)</td></tr>
 </table></dd>
-<dt>Examples</dt><dd><pre class="d_code"> <span class="d_keyword">mixin</span> <u>declareLibraryAndAlias</u>!(<span class="d_string">"ZeroMQ.zmq"</span>, <span class="d_string">"zmq"</span>);
+<dt>Examples</dt><dd><pre class="d_code"> <span class="d_keyword">mixin</span> <u>declareLibraryAndAlias</u>!(<span class="d_string">"deimos.openssl.sha"</span>, <span class="d_string">"sha"</span>);
 </pre>
 </dd>
 </dl>
@@ -464,7 +460,7 @@
 				</footer>
 				
 				<footer class="pull-right">
-					<p>&copy; Jens K. Mueller 2012-2012 (generated at Tue Aug 28 09:46:48 2012
+					<p>&copy; Jens K. Mueller 2012-2012 (generated at Tue Aug 28 13:33:01 2012
 )</p>
 				</footer>
 			</div>
