@@ -624,12 +624,6 @@ struct Library(alias moduleName)
 			assert(libc.isLoaded);
 		}
 
-		version(X86_64)
-		{
-			auto libc = Library!(core.stdc.stdio)("/lib/x86_64-linux-gnu/libc.so.6", false);
-			assert(libc.isLoaded);
-		}
-
 		assertThrown!UnsatisfiedLinkException(Library!(core.stdc.stdio)("unknown_library", false));
 	}
 
