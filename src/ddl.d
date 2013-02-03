@@ -557,7 +557,7 @@ struct Library(alias moduleName)
 	 * ExternCFunctions is a $(PHOBOS_MODULE_LINK std_typetuple, TypeTuple)
 	 * containing the names of all extern(C) functions declared in moduleName.
 	 */
-	alias staticFilter!(isExternCFunction, AllModuleMembers) ExternCFunctions;
+	alias Filter!(isExternCFunction, AllModuleMembers) ExternCFunctions;
 
 	private mixin template SelectiveImportNonExternCFunctions(Symbol...)
 	{
@@ -889,18 +889,6 @@ class UnsatisfiedLinkException : Exception
 }
 
 private:
-
-// TODO
-// move to std.typetuple
-template staticFilter(alias F, T...)
-{
-	static if (T.length == 0)
-		alias TypeTuple!() staticFilter;
-	else static if (F!(T[0]))
-		alias TypeTuple!(T[0], staticFilter!(F, T[1 .. $])) staticFilter;
-	else
-		alias TypeTuple!(      staticFilter!(F, T[1 .. $])) staticFilter;
-}
 
 string functionTypeAsString(alias functionName)()
 {
