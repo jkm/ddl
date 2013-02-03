@@ -19,11 +19,11 @@ Configure and Build
 
 Don't forget to update the submodules if you haven't cloned recursively.
 
-    $ git submodule init; git submodule update;
+	$ git submodule init; git submodule update;
 
 Use [premake4](https://bitbucket.org/goughy/premake-dev-d/) to configure ddl.
 
-    $ premake4 gmake
+	$ premake4 gmake
 	$ make
 
 Testing
