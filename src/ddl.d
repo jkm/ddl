@@ -228,8 +228,16 @@ version(Posix)
 	/// On Posix the libraryFilenamePrefix is "lib". On Windows it is "".
 	enum string libraryFilenamePrefix = "lib";
 
-	/// On Posix the libraryFilenameExtension is ".so". On Windows it is ".dll".
-	enum string libraryFilenameExtension = ".so";
+	version(OSX)
+	{
+		/// On Posix the libraryFilenameExtension is ".so". On OSX is it ".dylib". On Windows it is ".dll".
+		enum string libraryFilenameExtension = ".dylib";
+	}
+	else
+	{
+		enum string libraryFilenameExtension = ".so";
+	}
+
 }
 else version(Windows)
 {
